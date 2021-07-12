@@ -1,33 +1,42 @@
-const Posts = require("../models/Posts");
-const fs = require("fs");
+import Posts from "../models/Posts";
+import { Request, Response, NextFunction } from "express";
+import fs from "fs";
 
-exports.createPost = async (req, res, next) => {
+export const createPost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const postObject = JSON.parse(req.body.post);
     delete postObject._id;
     const post = new Posts({
       ...postObject,
       imageUrl: `${req.protocol}://${req.get("host")}/images/${
-        req.file.filename
+        req?.file?.filename
       }`,
     });
     const save = await post.save();
     res.status(201).json({ message: "Post créé ! " });
   } catch {
-    res.status(400).json({ error });
+    res.status(400).json({ Error });
   }
 };
 
-exports.getPosts = async (req, res, next) => {
+exports.getPosts = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const posts = await Posts.find();
     res.status(200).json(posts);
   } catch {
-    res.status(400).json(error);
+    res.status(400).json(Error);
   }
 };
 
-exports.deletePost = async (req, res, next) => {
+exports.deletePost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const post = await Posts.findOne({ _id: req.params.id });
     const filename = post.imageUrl.split("/images/")[1];
@@ -36,9 +45,9 @@ exports.deletePost = async (req, res, next) => {
       post
         .deleteOne({ _id: req.params.id })
         .then(() => res.status(200).json({ message: "Objet supprimmé !" }))
-        .catch((error) => res.status(404).json({ error }));
+        .catch((Error: Error) => res.status(404).json({ Error }));
     });
   } catch {
-    res.status(404).json({ error });
+    res.status(404).json({ Error });
   }
 };

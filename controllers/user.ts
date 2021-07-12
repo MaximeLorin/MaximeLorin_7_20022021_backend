@@ -1,9 +1,14 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+import bcrypt from "bcrypt";
+import { Request, Response, NextFunction } from "express";
 
-const User = require("../models/User");
+import jwt from "jsonwebtoken";
+import User from "../models/User";
 
-exports.signup = async (req, res, next) => {
+export const signup = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const hash = await bcrypt.hash(req.body.password, 10);
     if (!hash) {
@@ -21,7 +26,11 @@ exports.signup = async (req, res, next) => {
   }
 };
 
-exports.login = async (req, res, next) => {
+export const login = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const user = await User.findOne({ userName: req.body.userName });
     if (!user) {

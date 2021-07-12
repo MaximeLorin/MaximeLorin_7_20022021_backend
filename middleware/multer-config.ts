@@ -1,6 +1,6 @@
-const multer = require("multer");
+import multer from "multer";
 
-const MIME_TYPES = {
+const MIME_TYPES: { [index: string]: any } = {
   "image/jpg": "jpg",
   "image/jpeg": "jpg",
   "image/png": "png",

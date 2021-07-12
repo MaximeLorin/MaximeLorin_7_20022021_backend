@@ -16,6 +16,6 @@ try {
 } catch (error) {
   console.error("Impossible de se connecter, erreur suivante :", error);
 }
-module.exports = sequelize;
+export = sequelize;
 
-global.sequelize = sequelize;
+//global.sequelize = sequelize;

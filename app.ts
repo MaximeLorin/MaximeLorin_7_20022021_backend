@@ -1,4 +1,4 @@
-const express = require("express");
+import express, { Request, Response } from "express";
 const path = require("path");
 
 const userRoutes = require("./routes/user");
@@ -8,7 +8,7 @@ require("./models/connection");
 
 const app = express();
 
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Headers",
@@ -28,4 +28,4 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/api/posts", postsRoutes);
 app.use("/api/auth", userRoutes);
 
-module.exports = app;
+export default app;

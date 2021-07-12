@@ -1,9 +1,9 @@
-const Sequelize = require("sequelize");
-const sequelize = require("./connection");
+import Sequelize from "sequelize";
+import sequelize from "./connection";
 
-module.exports = sequelize.define("Posts", {
+export = sequelize.define("Posts", {
   id: {
-    type: Sequelize.INTEGER(11),
+    type: Sequelize.INTEGER,
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,

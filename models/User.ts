@@ -1,9 +1,9 @@
-const Sequelize = require("sequelize");
-const sequelize = require("./connection");
+import Sequelize from "sequelize";
+import sequelize from "./connection";
 
-module.exports = sequelize.define("User", {
+export = sequelize.define("User", {
   userId: {
-    type: Sequelize.INTEGER(11),
+    type: Sequelize.INTEGER,
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
