@@ -1,4 +1,3 @@
-import Posts from "../models/Posts";
 import { Request, Response, NextFunction } from "express";
 import fs from "fs";
 
@@ -17,9 +16,10 @@ export const createPost = async (
       }`,
     });
     const save = await post.save();
+    console.log(save, post);
     res.status(201).json({ message: "Post créé ! " });
-  } catch {
-    res.status(400).json({ Error });
+  } catch (err) {
+    res.status(400).send({ err: err });
   }
 };
 
