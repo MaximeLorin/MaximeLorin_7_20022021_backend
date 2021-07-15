@@ -10,7 +10,7 @@ main();
 const path = require("path");
 
 //const userRoutes = require("./routes/user");
-//const postsRoutes = require("./routes/posts");
+///const postsRoutes = require("./routes/posts");
 
 require("./models/connection");
 
