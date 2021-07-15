@@ -1,18 +1,16 @@
 import express, { Request, Response } from "express";
-//import { sequelize } from "./models";
+
 const { sequelize } = require("./models");
 
 async function main() {
-  await sequelize.sync();
+  await sequelize.authenticate();
 }
 main();
 
 const path = require("path");
 
-//const userRoutes = require("./routes/user");
+const userRoutes = require("./routes/user");
 ///const postsRoutes = require("./routes/posts");
-
-require("./models/connection");
 
 const app = express();
 
@@ -34,6 +32,6 @@ app.use(express.json());
 app.use("/images", express.static(path.join(__dirname, "images")));
 
 //app.use("/api/posts", postsRoutes);
-//app.use("/api/auth", userRoutes);
+app.use("/api/auth", userRoutes);
 
 export default app;
