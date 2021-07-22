@@ -45,12 +45,12 @@ export const login = async (
     const valid = await bcrypt.compare(req.body.password, users.password);
     if (!valid) {
       return res.status(401).json({
-        error: "Mot de passe non valide !" + console.log(users.password),
+        error: "Mot de passe non valide !",
       });
     }
     res.status(200).json({
-      userId: users._id,
-      token: jwt.sign({ userId: users._id }, "RANDOM_TOKEN_SECRET", {
+      userId: users.uuid,
+      token: jwt.sign({ userId: users.uuid }, "RANDOM_TOKEN_SECRET", {
         expiresIn: "24h",
       }),
     });
