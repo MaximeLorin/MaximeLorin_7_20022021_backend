@@ -10,7 +10,7 @@ main();
 const path = require("path");
 
 const userRoutes = require("./routes/user");
-///const postsRoutes = require("./routes/posts");
+const postsRoutes = require("./routes/posts");
 
 const app = express();
 
@@ -31,7 +31,7 @@ app.use(express.json());
 
 app.use("/images", express.static(path.join(__dirname, "images")));
 
-//app.use("/api/posts", postsRoutes);
+app.use("/api/posts", postsRoutes);
 app.use("/api/auth", userRoutes);
 
 export default app;
