@@ -9,8 +9,8 @@ export const createPost = async (
   next: NextFunction
 ) => {
   try {
-    const postObject = JSON.parse(req.body.post);
-    console.log(postObject);
+    const postObject = req.body.post;
+    console.log(req.body);
     delete postObject._id;
     const post = new Post({
       ...postObject,
