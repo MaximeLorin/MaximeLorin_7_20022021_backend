@@ -12,6 +12,9 @@ module.exports = {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
       },
+      userPicture: {
+        type: DataTypes.STRING,
+      },
       userName: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -19,6 +22,10 @@ module.exports = {
       password: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      isAdmin: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
       createdAt: {
         allowNull: false,

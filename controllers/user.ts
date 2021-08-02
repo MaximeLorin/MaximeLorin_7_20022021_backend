@@ -15,14 +15,14 @@ export const signup = async (
       return res.status(404).json({ error: "Mot de passe vide !" });
     }
 
-    const users = new User({
+    const user = new User({
       userName: req.body.userName,
       password: hash,
     });
-    if (!users) {
+    if (!user) {
       return res.status(404).json({ error: "Il n'y a rien a envoyer" });
     }
-    await users.save();
+    await user.save();
     res.status(201).json({ message: "Utilisateur créé !" });
   } catch (err) {
     res.status(500).json({ error: "Impossible de s'enregistrer ! " + err });
@@ -35,22 +35,22 @@ export const login = async (
   next: NextFunction
 ) => {
   try {
-    const users = await User.findOne({
+    const user = await User.findOne({
       where: { userName: req.body.userName },
     });
-    if (!users) {
+    if (!user) {
       return res.status(404).json({ error: "Utilisateur non trouvé ! " });
     }
-    console.log(users);
-    const valid = await bcrypt.compare(req.body.password, users.password);
+    console.log(user);
+    const valid = await bcrypt.compare(req.body.password, user.password);
     if (!valid) {
       return res.status(401).json({
         error: "Mot de passe non valide !",
       });
     }
     res.status(200).json({
-      userId: users.uuid,
-      token: jwt.sign({ userId: users.uuid }, "RANDOM_TOKEN_SECRET", {
+      userId: user.uuid,
+      token: jwt.sign({ userId: user.uuid }, "RANDOM_TOKEN_SECRET", {
         expiresIn: "24h",
       }),
     });

@@ -20,6 +20,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
       },
+      userPicture: {
+        type: DataTypes.STRING,
+      },
       userName: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -28,10 +31,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      isAdmin: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
     },
     {
       sequelize,
-      tableName: "users",
+      tableName: "user",
       modelName: "User",
     }
   );

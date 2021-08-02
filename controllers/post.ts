@@ -9,7 +9,7 @@ export const createPost = async (
   next: NextFunction
 ) => {
   try {
-    const postObject = req.body.post;
+    const postObject = JSON.parse(req.body.post);
     console.log(req.body);
     delete postObject._id;
     const post = new Post({
@@ -23,7 +23,7 @@ export const createPost = async (
     res.status(201).json({ message: "Post créé ! " });
   } catch (err) {
     console.log(err);
-    res.status(400).send(err);
+    res.status(400).json(err);
   }
 };
 
