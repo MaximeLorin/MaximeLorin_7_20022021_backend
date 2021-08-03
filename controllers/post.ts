@@ -9,11 +9,9 @@ export const createPost = async (
   next: NextFunction
 ) => {
   try {
-    const postObject = JSON.parse(req.body.post);
-    console.log(req.body);
-    delete postObject._id;
     const post = new Post({
-      ...postObject,
+      author: req.body.author,
+      title: req.body.title,
       imageUrl: `${req.protocol}://${req.get("host")}/images/${
         req?.file?.filename
       }`,

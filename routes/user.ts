@@ -7,4 +7,6 @@ router.post("/signup", userCtrl.signup);
 
 router.post("/login", userCtrl.login);
 
+router.post("/byid", userCtrl.userById);
+
 export = router;

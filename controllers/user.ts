@@ -58,3 +58,18 @@ export const login = async (
     res.status(500).json({ error });
   }
 };
+
+export const userById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user = await User.findOne({
+      where: { uuid: req.body.userId },
+    });
+    res.status(200).json(user.userName);
+  } catch (error) {
+    res.status(404).json(error);
+  }
+};
