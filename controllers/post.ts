@@ -34,3 +34,16 @@ exports.getPosts = async (req: Request, res: Response, next: NextFunction) => {
     res.status(400).json(err);
   }
 };
+
+exports.getOnePost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const post = await Post.findOne({ where: { id: req.params.id } });
+    res.status(200).json(post);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
