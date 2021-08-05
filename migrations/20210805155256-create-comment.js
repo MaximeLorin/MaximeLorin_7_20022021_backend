@@ -23,18 +23,8 @@ module.exports = {
         type: Sequelize.DATE,
       },
     });
-    await queryInterface.addColumn("Comments", "postId", {
-      type: Sequelize.INTEGER,
-      references: {
-        model: "post",
-        key: "id",
-      },
-      onUpdate: "CASCADE",
-      onDelete: "SET NULL",
-    });
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable("Comments");
-    await queryInterface.removeColumn("Comments", "postId");
   },
 };

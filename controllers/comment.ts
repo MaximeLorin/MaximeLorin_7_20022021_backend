@@ -33,7 +33,7 @@ exports.getComments = async (
     const comments = await Comment.findAll({
       where: { postId: req.body.postId },
     });
-
+    console.log(comments);
     res.status(200).json(comments);
   } catch (err) {
     res.status(400).json(err);
