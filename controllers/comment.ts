@@ -1,5 +1,6 @@
 const { sequelize, Comment } = require("../models");
 
+import { Console } from "console";
 import { Request, Response, NextFunction } from "express";
 import fs from "fs";
 
@@ -32,9 +33,9 @@ exports.getComments = async (
     const comments = await Comment.findAll({
       where: { postId: req.body.postId },
     });
+
     res.status(200).json(comments);
   } catch (err) {
-    console.log(err);
     res.status(400).json(err);
   }
 };
