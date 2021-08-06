@@ -3,6 +3,7 @@ const { sequelize, User } = require("../models");
 import bcrypt from "bcrypt";
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import PasswordValidator from "password-validator";
 
 export const signup = async (
   req: Request,
@@ -10,6 +11,11 @@ export const signup = async (
   next: NextFunction
 ) => {
   try {
+    const schema = new PasswordValidator();
+    schema.is().min(4);
+
+    const pass = schema.validate(req.body.password);
+
     const hash = await bcrypt.hash(req.body.password, 10);
     if (!hash) {
       return res.status(404).json({ error: "Mot de passe vide !" });

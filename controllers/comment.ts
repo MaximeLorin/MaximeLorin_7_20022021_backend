@@ -1,6 +1,5 @@
-const { sequelize, Comment } = require("../models");
+const { sequelize, Comment, Post } = require("../models");
 
-import { Console } from "console";
 import { Request, Response, NextFunction } from "express";
 import fs from "fs";
 
@@ -10,13 +9,18 @@ export const createComment = async (
   next: NextFunction
 ) => {
   try {
-    const comment = new Comment({
+    const comment = await Comment.create({
       author: req.body.author,
       content: req.body.content,
-      postId: req.body.postId,
+      PostId: req.body.postId,
     });
-    const save = await comment.save();
-    console.log(save, comment);
+    console.log(comment);
+    // const comment = new Comment({
+    //   author: req.body.author,
+    //   content: req.body.content,
+    // });
+    // const save = await comment.save();
+    // console.log(save, comment);
     res.status(201).json({ message: "Commentaire créé ! " });
   } catch (err) {
     console.log(err);
@@ -30,9 +34,9 @@ exports.getComments = async (
   next: NextFunction
 ) => {
   try {
-    const comments = await Comment.findAll({
-      where: { postId: req.body.postId },
-    });
+    const postId = req.query.postId;
+    console.log(req.query, postId);
+    const comments = await Comment.findAll({ where: { postId } });
     console.log(comments);
     res.status(200).json(comments);
   } catch (err) {
