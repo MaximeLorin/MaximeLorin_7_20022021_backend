@@ -14,14 +14,9 @@ export const createComment = async (
       content: req.body.content,
       PostId: req.body.postId,
     });
+
+    res.status(201).json(comment);
     console.log(comment);
-    // const comment = new Comment({
-    //   author: req.body.author,
-    //   content: req.body.content,
-    // });
-    // const save = await comment.save();
-    // console.log(save, comment);
-    res.status(201).json({ message: "Commentaire créé ! " });
   } catch (err) {
     console.log(err);
     res.status(400).json(err);
@@ -35,9 +30,13 @@ exports.getComments = async (
 ) => {
   try {
     const postId = req.query.postId;
-    console.log(req.query, postId);
-    const comments = await Comment.findAll({ where: { postId } });
-    console.log(comments);
+
+    // const comments = await Comment.findAll({ where: { postId } });
+    //const postId = req.query.postId;
+
+    const comments = await Post.findAll({
+      include: { model: Comment, where: { PostId: postId } },
+    });
     res.status(200).json(comments);
   } catch (err) {
     res.status(400).json(err);

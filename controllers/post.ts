@@ -1,4 +1,4 @@
-const { sequelize, Post } = require("../models");
+const { sequelize, Post, Comment } = require("../models");
 
 import { Request, Response, NextFunction } from "express";
 import fs from "fs";
@@ -41,9 +41,33 @@ exports.getOnePost = async (
   next: NextFunction
 ) => {
   try {
-    const post = await Post.findOne({ where: { id: req.params.id } });
+    //const post = await Post.findOne({ where: { id: req.params.id } });
+    const post = await Post.findAll({
+      include: { model: Comment },
+      where: { id: req.params.id },
+    });
     res.status(200).json(post);
   } catch (err) {
     res.status(400).json(err);
+  }
+};
+
+exports.deletePost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const post = await Post.findOne({ _id: req.params.id });
+    const filename = post.imageUrl.split("/images/")[1];
+
+    fs.unlink(`images/${filename}`, () => {
+      post
+        .destroy({ _id: req.params.id })
+        .then(() => res.status(200).json({ message: "Objet supprimmé !" }))
+        .catch((error: Error) => res.status(404).json({ error }));
+    });
+  } catch (err) {
+    res.status(404).json({ err });
   }
 };
