@@ -1,7 +1,7 @@
 const { sequelize, User } = require("../models");
-
-import bcrypt from "bcrypt";
 import { Request, Response, NextFunction } from "express";
+import bcrypt from "bcrypt";
+
 import jwt from "jsonwebtoken";
 import PasswordValidator from "password-validator";
 
@@ -24,7 +24,11 @@ export const signup = async (
     const user = new User({
       userName: req.body.userName,
       password: hash,
+      userPicture: `${req.protocol}://${req.get("host")}/images/${
+        req?.file?.filename
+      }`,
     });
+
     if (!user) {
       return res.status(404).json({ error: "Il n'y a rien a envoyer" });
     }
@@ -59,6 +63,7 @@ export const login = async (
       token: jwt.sign({ userId: user.uuid }, "RANDOM_TOKEN_SECRET", {
         expiresIn: "24h",
       }),
+      imageUrl: user.userPicture,
     });
   } catch (error) {
     res.status(500).json({ error });

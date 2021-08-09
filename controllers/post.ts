@@ -1,4 +1,4 @@
-const { sequelize, Post, Comment } = require("../models");
+const { sequelize, Post, Comment, User } = require("../models");
 
 import { Request, Response, NextFunction } from "express";
 import fs from "fs";
@@ -27,7 +27,9 @@ export const createPost = async (
 
 exports.getPosts = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const posts = await Post.findAll();
+    const posts = await Post.findAll({
+      include: { model: Comment },
+    });
     res.status(200).json(posts);
   } catch (err) {
     console.log(err);

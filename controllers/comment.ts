@@ -13,6 +13,9 @@ export const createComment = async (
       author: req.body.author,
       content: req.body.content,
       PostId: req.body.postId,
+      imageUrl: `${req.protocol}://${req.get("host")}/images/${
+        req?.file?.filename
+      }`,
     });
 
     res.status(201).json(comment);
