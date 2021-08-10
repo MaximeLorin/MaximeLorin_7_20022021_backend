@@ -1,4 +1,4 @@
-const { sequelize, User } = require("../models");
+const { sequelize, User, Post } = require("../models");
 import { Request, Response, NextFunction } from "express";
 import bcrypt from "bcrypt";
 
@@ -82,5 +82,22 @@ export const userById = async (
     res.status(200).json(user.userName);
   } catch (error) {
     res.status(404).json(error);
+  }
+};
+
+exports.getUserPosts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const posts = await User.findAll({
+      include: { model: Post },
+      where: { userId: req.params.id },
+    });
+    res.status(200).json(posts);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(err);
   }
 };
