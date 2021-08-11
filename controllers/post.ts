@@ -15,6 +15,7 @@ export const createPost = async (
       imageUrl: `${req.protocol}://${req.get("host")}/images/${
         req?.file?.filename
       }`,
+      UserUuid: req.body.UserUuid,
     });
     const save = await post.save();
     console.log(save, post);
@@ -82,7 +83,7 @@ exports.modifyPost = async (
   try {
     const postObject = req.file
       ? {
-          ...JSON.parse(req.body.sauce),
+          // ...JSON.parse(req.body.sauce),
           imageUrl: `${req.protocol}://${req.get("host")}/images/${
             req.file.filename
           }`,

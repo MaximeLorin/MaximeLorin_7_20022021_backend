@@ -11,7 +11,7 @@ module.exports = {
       onUpdate: "CASCADE",
       onDelete: "SET NULL",
     });
-    await queryInterface.addColumn("Post", "userId", {
+    await queryInterface.addColumn("Post", "UserUuid", {
       type: Sequelize.UUID,
       references: {
         model: "user",
@@ -24,6 +24,6 @@ module.exports = {
 
   down: async (queryInterface, Sequelize) => {
     await queryInterface.removeColumn("Comments", "postId");
-    await queryInterface.removeColumn("Post", "userId");
+    await queryInterface.removeColumn("Post", "UserUuid");
   },
 };

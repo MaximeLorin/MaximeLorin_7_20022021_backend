@@ -9,6 +9,7 @@ export const createComment = async (
   next: NextFunction
 ) => {
   try {
+    console.log(req.body);
     const comment = await Comment.create({
       author: req.body.author,
       content: req.body.content,
