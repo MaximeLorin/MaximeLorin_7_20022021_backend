@@ -1,4 +1,4 @@
-const { sequelize, User, Post } = require("../models");
+const { sequelize, User, Post, Comment } = require("../models");
 import { Request, Response, NextFunction } from "express";
 import bcrypt from "bcrypt";
 import fs from "fs";
@@ -64,6 +64,7 @@ export const login = async (
         expiresIn: "24h",
       }),
       imageUrl: user.userPicture,
+      userName: user.userName,
     });
   } catch (error) {
     res.status(500).json({ error });
@@ -91,11 +92,15 @@ exports.getUserPosts = async (
   next: NextFunction
 ) => {
   try {
-    const posts = await User.findAll({
-      include: { model: Post },
-      where: { uuid: req.params.uuid },
+    // const posts = await User.findAll({
+    //   include: { model: Post },
+    //   where: { uuid: req.params.uuid },
+    // });
+    const posts = await Post.findAll({
+      include: { model: Comment },
+      where: { UserUuid: req.params.uuid },
     });
-
+    // const result = { posts, posts };
     res.status(200).json(posts);
   } catch (err) {
     console.log(err);
@@ -117,11 +122,38 @@ exports.deleteUser = async (
 
     fs.unlink(`images/${filename}`, () => {
       user
-        .destroy({ where: { uuid: req.params.uuid } })
+        .destroy({
+          where: { uuid: req.params.uuid },
+        })
         .then(() => res.status(200).json({ message: "User supprimé !" }))
         .catch((error: Error) => res.status(404).json({ error }));
     });
   } catch (err) {
     res.status(404).json({ err });
+  }
+};
+
+exports.modifyUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user = await User.findByPk(req.params.uuid);
+    console.log(user.uuid);
+    const userImg = `${req.protocol}://${req.get("host")}/images/${
+      req?.file?.filename
+    }`;
+
+    if (userImg) {
+      // console.log(user.uuid, userImg);
+      await user.update({
+        userPicture: userImg,
+      });
+    }
+
+    res.status(200).json(userImg);
+  } catch (error) {
+    res.status(404).json(error);
   }
 };

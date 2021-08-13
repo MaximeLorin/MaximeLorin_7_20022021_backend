@@ -13,6 +13,8 @@ router.post("/byid", userCtrl.userById);
 
 router.get("/:uuid", multer, userCtrl.getUserPosts);
 
-router.delete("/:uuid", multer, userCtrl.deleteUser);
+router.delete("/:uuid", auth, multer, userCtrl.deleteUser);
+
+router.put("/:uuid", auth, multer, userCtrl.modifyUser);
 
 export = router;

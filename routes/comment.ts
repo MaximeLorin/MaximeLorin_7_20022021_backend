@@ -8,6 +8,8 @@ const commentCtrl = require("../controllers/comment");
 router.post("/", commentCtrl.createComment);
 
 router.get("/", commentCtrl.getComments);
+
+router.delete("/:id", commentCtrl.deleteComment);
 //router.delete("/:id", auth, postsCtrl.deletePost);
 
 export = router;

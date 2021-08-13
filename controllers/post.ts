@@ -74,27 +74,3 @@ exports.deletePost = async (
     res.status(404).json({ err });
   }
 };
-
-exports.modifyPost = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const postObject = req.file
-      ? {
-          // ...JSON.parse(req.body.sauce),
-          imageUrl: `${req.protocol}://${req.get("host")}/images/${
-            req.file.filename
-          }`,
-        }
-      : { ...req.body };
-    const modifyIt = await Post.updateOne(
-      { _id: req.params.id },
-      { ...postObject, _id: req.params.id }
-    );
-    res.status(200).json({ message: "Objet modifié !" });
-  } catch (error) {
-    res.status(404).json(error);
-  }
-};

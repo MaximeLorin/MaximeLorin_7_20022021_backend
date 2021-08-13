@@ -46,3 +46,16 @@ exports.getComments = async (
     res.status(400).json(err);
   }
 };
+
+exports.deleteComment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    Comment.destroy({ where: { id: req.params.id } });
+    res.status(200).json({ message: "commentaire effacé!" });
+  } catch (err) {
+    res.status(404).json({ err });
+  }
+};
