@@ -61,12 +61,18 @@ exports.deletePost = async (
   next: NextFunction
 ) => {
   try {
-    const post = await Post.findOne({ _id: req.params.id });
+    const params = { _id: req.params.id };
+    const userId = params._id.split(":")[1];
+    const postId = params._id.split(":")[0];
+    console.log(postId);
+    const post = await Post.findOne({ _id: postId });
+
     const filename = post.imageUrl.split("/images/")[1];
+    const userPost = await User.findOne({ where: { uuid: post.UserUuid } });
 
     fs.unlink(`images/${filename}`, () => {
       post
-        .destroy({ _id: req.params.id })
+        .destroy({ _id: postId })
         .then(() => res.status(200).json({ message: "Objet supprimmé !" }))
         .catch((error: Error) => res.status(404).json({ error }));
     });
