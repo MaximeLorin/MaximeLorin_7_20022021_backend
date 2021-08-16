@@ -27,6 +27,7 @@ export const signup = async (
       userPicture: `${req.protocol}://${req.get("host")}/images/${
         req?.file?.filename
       }`,
+      isAdmin: req.body.isAdmin,
     });
 
     if (!user) {
@@ -65,6 +66,7 @@ export const login = async (
       }),
       imageUrl: user.userPicture,
       userName: user.userName,
+      isAdmin: user.isAdmin,
     });
   } catch (error) {
     res.status(500).json({ error });
@@ -101,6 +103,7 @@ exports.getUserPosts = async (
       where: { UserUuid: req.params.uuid },
     });
     // const result = { posts, posts };
+
     res.status(200).json(posts);
   } catch (err) {
     console.log(err);

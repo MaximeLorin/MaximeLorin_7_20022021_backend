@@ -9,6 +9,8 @@ export const createPost = async (
   next: NextFunction
 ) => {
   try {
+    const userPic = await User.findOne({ where: { uuid: req.body.UserUuid } });
+
     const post = new Post({
       author: req.body.author,
       title: req.body.title,
@@ -16,6 +18,7 @@ export const createPost = async (
         req?.file?.filename
       }`,
       UserUuid: req.body.UserUuid,
+      imageUser: userPic.userPicture,
     });
     const save = await post.save();
     console.log(save, post);
@@ -64,18 +67,22 @@ exports.deletePost = async (
     const params = { _id: req.params.id };
     const userId = params._id.split(":")[1];
     const postId = params._id.split(":")[0];
-    console.log(postId);
+
     const post = await Post.findOne({ _id: postId });
 
     const filename = post.imageUrl.split("/images/")[1];
     const userPost = await User.findOne({ where: { uuid: post.UserUuid } });
 
-    fs.unlink(`images/${filename}`, () => {
-      post
-        .destroy({ _id: postId })
-        .then(() => res.status(200).json({ message: "Objet supprimmé !" }))
-        .catch((error: Error) => res.status(404).json({ error }));
-    });
+    const isAdmin = await User.findOne({ where: { uuid: userId } });
+
+    if (userId === userPost.uuid || isAdmin.isAdmin) {
+      fs.unlink(`images/${filename}`, () => {
+        post
+          .destroy({ _id: postId })
+          .then(() => res.status(200).json({ message: "Objet supprimmé !" }))
+          .catch((error: Error) => res.status(404).json({ error }));
+      });
+    }
   } catch (err) {
     res.status(404).json({ err });
   }

@@ -1,4 +1,4 @@
-const { sequelize, Comment, Post } = require("../models");
+const { sequelize, Comment, Post, User } = require("../models");
 
 import { Request, Response, NextFunction } from "express";
 import fs from "fs";
@@ -53,7 +53,17 @@ exports.deleteComment = async (
   next: NextFunction
 ) => {
   try {
-    Comment.destroy({ where: { id: req.params.id } });
+    const params = req.params;
+    const userId = params.id.split(":")[1];
+    const commentId = params.id.split(":")[0];
+
+    const isAdmin = await User.findOne({ where: { uuid: userId } });
+    const commentUser = await Comment.findOne({ where: { id: commentId } });
+    console.log(commentUser);
+    if (isAdmin.isAdmin || commentUser.author === isAdmin.userName) {
+      Comment.destroy({ where: { id: commentId } });
+    }
+
     res.status(200).json({ message: "commentaire effacé!" });
   } catch (err) {
     res.status(404).json({ err });
