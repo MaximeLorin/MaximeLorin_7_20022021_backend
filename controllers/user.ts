@@ -16,25 +16,30 @@ export const signup = async (
 
     const pass = schema.validate(req.body.password);
 
-    const hash = await bcrypt.hash(req.body.password, 10);
-    if (!hash) {
-      return res.status(404).json({ error: "Mot de passe vide !" });
-    }
-
-    const user = new User({
-      userName: req.body.userName,
-      password: hash,
-      userPicture: `${req.protocol}://${req.get("host")}/images/${
-        req?.file?.filename
-      }`,
-      isAdmin: req.body.isAdmin,
+    const user = await User.findOne({
+      where: { userName: req.body.userName },
     });
 
-    if (!user) {
-      return res.status(404).json({ error: "Il n'y a rien a envoyer" });
+    if (pass && !user) {
+      const hash = await bcrypt.hash(req.body.password, 10);
+      if (!hash) {
+        return res.status(404).json({ error: "Mot de passe vide !" });
+      }
+      const user = new User({
+        userName: req.body.userName,
+        password: hash,
+        userPicture: `${req.protocol}://${req.get("host")}/images/${
+          req?.file?.filename
+        }`,
+        isAdmin: req.body.isAdmin,
+      });
+
+      if (!user) {
+        return res.status(404).json({ error: "Il n'y a rien a envoyer" });
+      }
+      await user.save();
+      res.status(201).json({ message: "Utilisateur créé !" });
     }
-    await user.save();
-    res.status(201).json({ message: "Utilisateur créé !" });
   } catch (err) {
     res.status(500).json({ error: "Impossible de s'enregistrer ! " + err });
   }
