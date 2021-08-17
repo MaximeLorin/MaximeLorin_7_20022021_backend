@@ -67,9 +67,9 @@ exports.deletePost = async (
     const params = { _id: req.params.id };
     const userId = params._id.split(":")[1];
     const postId = params._id.split(":")[0];
-
-    const post = await Post.findOne({ _id: postId });
-
+    console.log(postId);
+    const post = await Post.findOne({ where: { id: postId } });
+    console.log(post);
     const filename = post.imageUrl.split("/images/")[1];
     const userPost = await User.findOne({ where: { uuid: post.UserUuid } });
 
