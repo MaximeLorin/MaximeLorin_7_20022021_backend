@@ -54,6 +54,7 @@ export const login = async (
     const user = await User.findOne({
       where: { userName: req.body.userName },
     });
+    console.log(user);
     if (!user) {
       return res.status(404).json({ error: "Utilisateur non trouvé ! " });
     }
